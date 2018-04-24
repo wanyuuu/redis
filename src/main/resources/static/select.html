@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/tojson.js"></script>
+</head>
+<body>
+    <h1>用户查询</h1>
+<a>用户名&nbsp;&nbsp;&nbsp;&nbsp;密码</a>
+<div id="user"></div>
+<script>
+    var USER_QUERY_URL="http://localhost:8080/user/show";
+    var USER_DEL_URL="http://localhost:8080/user/del";
+  function show() {
+      $.ajax({
+          url:USER_QUERY_URL,
+          type:"GET",
+          dataType:"json",
+          statusCode:{
+              200:function (data) {
+                  $("#user").html("");
+                  $(data).each(function (index) {
+                      $("#user").append(data[index].username+"&nbsp;&nbsp;&nbsp;&nbsp;"+data[index].password+
+                              "<a href='#' onclick='del("+data[index].id+")'>删除</a> " +
+                              "<a href='update.html?id="+data[index].id+"'>修改</a>"+
+                              "<br/>");
+                  })
+              }
+          }
+      });
+  }
+    function del(id) {
+        $.ajax({
+            url:USER_DEL_URL+"/"+id,
+            type:"DELETE",
+            statusCode:{
+                200:function (data) {
+                    show();
+                }
+            }
+        })
+
+
+    }
+    show();
+</script>
+</body>
+</html>

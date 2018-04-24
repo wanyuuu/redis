@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/tojson.js"></script>
+</head>
+<body>
+    <form id="form1">
+        用户名：<input type="text" id="username" name="username">
+        <br/>
+        <br/>
+        密码：<input type="text" id="password" name="password">
+        <input type="hidden" id="id" name="id">
+    </form>
+    <input type="button" id="save" value="保存">
+<script>
+    var url=location.href;
+    var s=url.lastIndexOf("?");
+    var len=url.substring(s+1,url.length);
+    var id=len.split("=")[1];
+    var USER_QUERY_URL="http://localhost:8080/user/queryid";
+    $.ajax({
+        url:USER_QUERY_URL+"/"+id,
+        type:"GET",
+        dataType:"json",
+        statusCode:{
+            200:function (data) {
+                $("#username").val(data.username);
+                $("#password").val(data.password);
+                $("#id").val(data.id);
+            }
+        }
+    });
+    $("#save").click(function () {
+        var USER_UPDATE_URL="http://localhost:8080/user/update";
+        var json=JSON.stringify($("#form1").serializeObject());
+        alert(json);
+        $.ajax({
+            url:USER_UPDATE_URL,
+            data:json,
+            contentType:"application/json",
+            type:"POST",
+            statusCode:{
+                200:function (data) {
+                    window.location="select.html";
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

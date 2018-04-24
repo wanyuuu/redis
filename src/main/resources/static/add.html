@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/tojson.js"></script>
+</head>
+<body>
+    <form id="form1">
+       用户名：<input type="text" name="username">
+        <br/>
+        密  码：<input type="text" name="password">
+    </form>
+<button id="add">添加</button>
+    <script>
+        $("#add").click(function () {
+            var USER_ADD_URL="http://localhost:8080/user/add";
+            var json=JSON.stringify($("#form1").serializeObject());
+            $.ajax({
+                url:USER_ADD_URL,
+                type:"POST",
+                data:json,
+                contentType:"application/json",
+                statusCode:{
+                    200:function (data) {
+                        window.location="select.html";
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+</html>
